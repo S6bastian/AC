@@ -4,11 +4,8 @@ using namespace std;
 
 template<int T>
 void c2(bitset<T>& x){
-    //cout<<x<<endl;
     x.flip();
-    //cout<<x<<endl;
     x = x.to_ulong() + 1;
-    //cout<<x<<endl;
 }
 
 template<int T>
@@ -20,14 +17,32 @@ bitset<T> suma(bitset<T> a, bitset<T> b) {
         bool bit_a = a[i];
         bool bit_b = b[i];
 
-        // Realizar la suma de bits y considerar el acarreo
         bool suma = bit_a ^ bit_b ^ carry; // Suma de bits usando XOR
         carry = (bit_a & bit_b) | (carry & (bit_a ^ bit_b));
 
-        // Asignar el resultado al bit correspondiente en el resultado
         resultado[i] = suma;
     }
 
+    return resultado;
+}
+
+template<int T>
+bitset<T> resta(bitset<T> a, bitset<T> b) {
+    bitset<T> resultado;
+    bool carry = false; // Inicialmente no hay acarreo
+    c2<T>(b);
+
+    for (int i = 0; i < T; i++) {
+        bool bit_a = a[i];
+        bool bit_b = b[i];
+
+        bool suma = bit_a ^ bit_b ^ carry; // Suma de bits usando XOR
+        carry = (bit_a & bit_b) | (carry & (bit_a ^ bit_b));
+
+        resultado[i] = suma;
+    }
+    
+    c2<T>(b);
     return resultado;
 }
 
@@ -58,18 +73,11 @@ bitset<TT> multiplicacion(bitset<T> M, bitset<T> Q){
         if(q.test(0) == true && q_1.test(0) == false){
             q = suma<n>(q, a);
             cout<<"Q "<<q<<" "<<q_1<<endl;
-            //counter--;
         }
         else if(q.test(0) == false && q_1.test(0) == true){
             q = suma<n>(q, m);
             cout<<"Q "<<q<<" "<<q_1<<endl;
-            //counter--;
-        }
-
-        if(counter == 0)
-            break;
-
-        
+        }    
 
         if(q.test(0)){
             q_1.set();
@@ -79,26 +87,37 @@ bitset<TT> multiplicacion(bitset<T> M, bitset<T> Q){
         }
 
         q >>= 1;
+
         if(q_1.test(0)){
             q.set(TT-1);
         }
+
         cout<<"Q "<<q<<" "<<q_1<<endl;
         counter--;
-        
     }
     return q;
 }
 
 int main(){
-    const int n = 4;
+    const int n = 8;
     bitset<n> A; //palabra binaria auxiliar
-    bitset<n> M(5); //multiplicando
-    bitset<n> Q(3); //multiplicador
+    bitset<n> M(25); //multiplicando
+    bitset<n> Q(13); //multiplicador
 
     bitset<n*2> resultado;
+    bitset<n> resultado_suma;
+    bitset<n> resultado_resta;
     
-    resultado = multiplicacion<n>(M, Q);
+    
 
-    cout<<"Resultado: "<<resultado.to_ulong()<<endl;
+    resultado = multiplicacion<n>(M, Q);
+    cout<<"Resultado multiplicacion: "<<M.to_ulong()<<" x "<<Q.to_ulong()<<" = "<<resultado.to_ulong()<<endl<<endl;
+
+    resultado_suma=suma<n>(M,Q);
+    cout<<"Resultado suma: "<<M.to_ulong()<<" + "<<Q.to_ulong()<<" = "<<resultado_suma.to_ulong()<<endl<<endl;
+    
+    resultado_resta=resta<n>(M,Q);
+    cout<<"Resultado resta: "<<M.to_ulong()<<" - "<<Q.to_ulong()<<" = "<<resultado_resta.to_ulong()<<endl<<endl;
+
     return 0;
 }
