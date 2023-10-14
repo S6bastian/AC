@@ -12,21 +12,21 @@ main:
     la $a0, degree_prompt
     syscall
 
-    # Lea el grado del polinomio desde la entrada estándar
+    # Lea el grado del polinomio desde la entrada estï¿½ndar
     li $v0, 5
     syscall
-    move $s0, $v0  # $s0 contiene el grado del polinomio
+    move $s0, $v0  
 
     # Reserve espacio para almacenar los coeficientes
     li $v0, 9
-    li $a0, 4       # Cada coeficiente es un entero (4 bytes)
-    mul $a0, $a0, $s0  # Reservar espacio para todos los coeficientes
+    li $a0, 4       
+    mul $a0, $a0, $s0  
     syscall
-    move $s1, $v0  # $s1 contiene la dirección base de los coeficientes
+    move $s1, $v0  
 
     # Pida al usuario ingresar los coeficientes
     la $t0, coefficients
-    li $t1, 0       # Inicializar el índice del coeficiente en 0
+    li $t1, 0       
 
 input_coefficients:
     beq $t1, $s0, input_x
